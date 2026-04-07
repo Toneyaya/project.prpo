@@ -93,6 +93,27 @@ h1 {
   color: var(--ink-soft);
 }
 
+.authors-inline {
+  margin-top: 0.95rem;
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.authors-inline span {
+  padding: 0.24rem 0.58rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.note {
+  margin: 0.55rem 0 0;
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+}
+
 .hero {
   padding: 4.6rem 0 2rem;
 }
@@ -153,6 +174,11 @@ h2 {
   font-size: clamp(1.42rem, 2.6vw, 2rem);
 }
 
+.section-lead {
+  margin-top: -0.1rem;
+  color: var(--ink-soft);
+}
+
 .cards-3 {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -179,6 +205,18 @@ h2 {
 
 .media-block {
   margin-top: 1.1rem;
+}
+
+.subpanel {
+  margin-top: 0.9rem;
+}
+
+.subpanel img {
+  width: 100%;
+  display: block;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #fff;
 }
 
 .media-card img {
@@ -228,6 +266,10 @@ h2 {
   overflow-x: auto;
 }
 
+.table-wrap h3 {
+  margin-top: 0;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -253,6 +295,47 @@ pre {
   color: #eef4fd;
   border-radius: 12px;
   padding: 1rem;
+}
+
+.author-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.72rem;
+}
+
+.author-card {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.85rem;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.author-card h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.author-card p {
+  margin: 0.32rem 0 0;
+  color: var(--ink-soft);
+}
+
+.affiliation-logos {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.affiliation-logos img {
+  width: 100%;
+  max-height: 58px;
+  object-fit: contain;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.75);
+  padding: 0.55rem;
 }
 
 .footer {
@@ -282,7 +365,9 @@ pre {
   }
 
   .cards-3,
-  .stats {
+  .stats,
+  .author-grid,
+  .affiliation-logos {
     grid-template-columns: 1fr;
   }
 
