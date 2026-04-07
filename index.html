@@ -26,19 +26,25 @@
       <div class="container nav-inner">
         <a class="brand" href="#top">PRPO</a>
         <nav>
+          <a href="#abstract">Abstract</a>
           <a href="#introduction">Introduction</a>
           <a href="#method">Method</a>
           <a href="#mcdr-bench">MCDR-Bench</a>
           <a href="#results">Results</a>
-          <a href="#authors">Authors</a>
           <a href="#resources">Resources</a>
+          <a href="#citation">Citation</a>
         </nav>
       </div>
     </header>
 
     <main id="top">
       <section class="hero container reveal">
-        <p class="venue">ICLR 2026 Submission</p>
+        <div class="page-corner-logos" aria-label="Affiliations">
+          <img src="assets/bytedance.svg" alt="ByteDance logo" />
+          <img src="assets/shanghaitech.svg" alt="ShanghaiTech University logo" />
+          <img src="assets/sysu.svg" alt="Sun Yat-sen University logo" />
+        </div>
+        <p class="venue">Accepted at ICLR 2026</p>
         <h1>Chart Deep Research in LVLMs via Parallel Relative Policy Optimization</h1>
         <p class="subtitle">
           A unified framework with PRPO for robust multi-dimensional optimization and MCDR-Bench for
@@ -60,42 +66,17 @@
           corresponding author: Sibei Yang.
         </p>
         <div class="hero-actions">
-          <a class="button primary" href="#results">Main Results</a>
+          <a class="button primary" href="#abstract">Abstract</a>
+          <a class="button" href="#introduction">Introduction</a>
           <a class="button" href="#method">Method</a>
           <a class="button" href="#mcdr-bench">MCDR-Bench</a>
+          <a class="button" href="#results">Main Results</a>
           <a class="button" href="#citation">BibTeX</a>
           <a class="button" href="https://github.com/Toneyaya/prpo.github.io" target="_blank" rel="noreferrer">Code</a>
         </div>
       </section>
 
-      <section id="introduction" class="container panel reveal">
-        <h2>Introduction</h2>
-        <p>
-          Charts have become central analytical interfaces for discovery and decision support, but
-          most multimodal systems still solve shallow tasks such as chart QA and factual lookup.
-          The core challenge is chart deep research: integrating background knowledge, precise fact
-          extraction, relationship construction, deep report synthesis, and forecasting into a
-          coherent analytical pipeline.
-        </p>
-        <p>
-          We identify two bottlenecks: a training bottleneck from reward interference and
-          heterogeneous data optimization conflicts, and an evaluation bottleneck from subjective,
-          hard-to-scale open-ended assessment. PRPO and MCDR-Bench are designed to resolve these two
-          bottlenecks jointly.
-        </p>
-        <div class="panel subpanel">
-          <img
-            src="assets/reward-motivation.png"
-            alt="Appendix reward analysis showing GRPO scalar aggregation vs PRPO reward-wise optimization."
-          />
-          <p class="caption">
-            Motivation from Appendix (Figure 1): scalar reward aggregation in GRPO weakens reward
-            variance and advantage discrimination, while PRPO preserves dimension-specific signals.
-          </p>
-        </div>
-      </section>
-
-      <section class="container panel reveal">
+      <section id="abstract" class="container panel reveal">
         <h2>Abstract</h2>
         <p>
           We target chart deep research, where models must go beyond visual QA and produce reliable
@@ -107,71 +88,102 @@
         </p>
       </section>
 
-      <section class="container reveal media-block">
-        <div class="panel media-card">
-          <img src="assets/teaser.svg" alt="Optimization trajectories of GRPO versus PRPO." />
+      <section id="introduction" class="container panel reveal">
+        <h2>Introduction</h2>
+        <p>
+          Charts are now central analytical interfaces for discovery and decision support, yet most
+          multimodal systems remain focused on shallow tasks such as chart QA and factual lookup.
+          This work targets chart deep research: end-to-end capability spanning background knowledge
+          integration, fact extraction, relationship construction, report synthesis, and
+          forecast/plan reasoning.
+        </p>
+        <p>
+          We identify two bottlenecks that systematically constrain this capability. At training
+          time, scalar reward aggregation and heterogeneous data mixing create optimization
+          conflicts. At evaluation time, open-ended report scoring is costly and subjective,
+          preventing reliable large-scale benchmarking.
+        </p>
+        <div class="panel subpanel">
+          <img
+            src="assets/teaser.svg"
+            alt="Optimization trajectories of GRPO versus PRPO under multi-dimensional rewards and heterogeneous data."
+          />
           <p class="caption">
-            PRPO decomposes optimization across reward dimensions and data types, improving
-            exploration and reducing optimization conflicts.
+            Main-paper teaser: GRPO suffers from interference-limited exploration, while PRPO
+            decomposes optimization over reward dimensions and capability groups, yielding more
+            effective exploration and stronger final performance.
           </p>
         </div>
+        <p>
+          To address both bottlenecks jointly, we propose Parallel Relative Policy Optimization
+          (PRPO) for training and MCDR-Bench for evaluation. PRPO improves capability development
+          under multi-objective RL post-training, while MCDR-Bench converts subjective generation
+          quality into objective error identification with unique answers.
+        </p>
       </section>
 
       <section id="method" class="container reveal">
         <h2>Method</h2>
         <p class="section-lead">
-          PRPO addresses both optimization conflict sources: interference across reward dimensions
-          and imbalance across heterogeneous capability data.
+          PRPO addresses two conflict sources together: interference across reward dimensions and
+          imbalance across heterogeneous capability data.
         </p>
         <div class="cards-3">
           <article class="card">
             <h3>Reward-PRPO</h3>
             <p>
-              Computes dimension-wise relative advantages instead of scalarized rewards, preserving
-              discriminative optimization signals for different reasoning aspects.
+              Replaces scalarized rewards with dimension-wise relative advantages, preserving
+              discriminative optimization signals for distinct reasoning objectives.
             </p>
           </article>
           <article class="card">
             <h3>Data-PRPO</h3>
             <p>
-              Partitions samples by capability type and uses iterative outlier relegation to prevent
-              unstable partition statistics from dominating updates.
+              Partitions training samples by capability type and applies iterative outlier
+              relegation to avoid unstable partition statistics dominating updates.
             </p>
           </article>
           <article class="card">
             <h3>Unified PRPO</h3>
             <p>
-              Combines reward and data parallelization to support balanced capability growth in
-              complex multi-task chart reasoning.
+              Integrates reward- and data-parallel optimization to support balanced capability
+              growth for complex chart reasoning.
             </p>
           </article>
         </div>
         <div class="panel subpanel">
           <h3>Core Formulation</h3>
-          <p>PRPO keeps both reward-dimension and data-partition structure during optimization:</p>
+          <p>
+            For response <em>i</em>, reward dimension <em>k</em>, and data partition <em>m</em>, PRPO
+            computes a partition-specific and dimension-specific standardized advantage:
+          </p>
           <p class="equation">
             $$\hat{A}_i^{(k,m)} = \frac{R_i^{(k)} - \bar{R}^{(k,m)}}{\sigma^{(k,m)}}$$
+          </p>
+          <p>
+            This advantage is then injected into a clipped policy objective aggregated over
+            dimensions and partitions:
           </p>
           <p class="equation">
             $$J_{\mathrm{PRPO}}(\theta)=\sum_{m=1}^{M_{\mathrm{final}}}\lambda_m\sum_{k=1}^{K}\lambda_k\,\mathbb{E}\left[\frac{1}{|\mathcal{G}_m|}\sum_{i\in\mathcal{G}_m}\frac{1}{|o_i|}\sum_{t=1}^{|o_i|}L_{\mathrm{clip}}\big(r_{i,t}(\theta),\hat{A}_i^{(k,m)}\big)\right]$$
           </p>
+          <ul class="formula-notes">
+            <li><strong>\(R_i^{(k)}\)</strong>: reward of sample <em>i</em> on dimension <em>k</em>.</li>
+            <li><strong>\(\bar{R}^{(k,m)},\sigma^{(k,m)}\)</strong>: mean/std within partition <em>m</em> for dimension <em>k</em>.</li>
+            <li><strong>\(\mathcal{G}_m\)</strong>: validated capability partition after iterative outlier relegation.</li>
+            <li><strong>\(\lambda_k,\lambda_m\)</strong>: controllable weights for reward dimensions and data partitions.</li>
+            <li><strong>\(L_{\mathrm{clip}}\)</strong>: PPO-style clipped surrogate ensuring stable policy updates.</li>
+          </ul>
           <p class="caption">
-            This unifies Reward-PRPO and Data-PRPO: no scalar reward collapse, and no blind mixing
-            of heterogeneous capability data.
+            Compared with scalar-reward GRPO, PRPO preserves cross-dimension signals and avoids
+            blind mixing of heterogeneous data, enabling balanced capability development.
           </p>
         </div>
         <div class="panel subpanel">
-          <img src="assets/prpo-framework.png" alt="PRPO framework diagram from the paper." />
+          <img src="assets/prpo-framework.svg" alt="PRPO framework diagram from the paper." />
           <p class="caption">
             PRPO framework: reward-wise decomposition + capability-wise grouping with iterative
             outlier relegation.
-          </p>
-        </div>
-        <div class="panel subpanel">
-          <img src="assets/training.svg" alt="Training dynamics comparison between GRPO and PRPO." />
-          <p class="caption">
-            PRPO demonstrates better early exploration and stronger late-stage stability than GRPO,
-            consistent with reduced reward and data-level optimization conflicts.
           </p>
         </div>
       </section>
@@ -179,23 +191,24 @@
       <section id="mcdr-bench" class="container panel reveal">
         <h2>MCDR-Bench</h2>
         <p>
-          MCDR-Bench is designed around the error uniqueness principle. It transforms subjective
-          report quality judgment into objective error identification over five dimensions:
-          Background Knowledge (BG), Fact Extraction (FE), Relationship Construction (RL), Deep
-          Research (DR), and Forecast/Plan (F/P).
+          MCDR-Bench is built around the error uniqueness principle: convert subjective report
+          quality judgment into objective error identification. Evaluation is decomposed into five
+          dimensions: Background Knowledge (BG), Fact Extraction (FE), Relationship Construction
+          (RL), Deep Research (DR), and Forecast/Plan (F/P).
         </p>
         <p>
-          It follows a two-phase protocol: (1) multi-agent deep report generation over complex
-          charts, and (2) targeted error injection to build fine-grained objective evaluation tasks.
+          The benchmark follows a two-phase protocol: (1) high-quality deep report generation over
+          complex charts, and (2) targeted error injection to produce fine-grained objective
+          evaluation tasks.
         </p>
         <div class="panel subpanel">
-          <img src="assets/mcdr-framework.png" alt="MCDR-Bench construction framework from the paper." />
+          <img src="assets/mcdr-framework.svg" alt="MCDR-Bench construction framework from the paper." />
           <p class="caption">
             MCDR-Bench framework with five capability stages: background acquisition, fact
             extraction, relationship construction, deep report generation, and forecast/plan.
           </p>
         </div>
-        <div class="creation-grid">
+        <div class="creation-grid five-steps">
           <article class="card">
             <h3>Step 1: Chart Collection</h3>
             <p>
@@ -204,24 +217,31 @@
             </p>
           </article>
           <article class="card">
-            <h3>Step 2: Report Generation</h3>
+            <h3>Step 2: Background Acquisition</h3>
             <p>
-              Build deep-research reports via a five-stage multi-agent pipeline with human checks
-              at report and decision phases.
+              Retrieve domain context to support grounded interpretation before chart-level
+              reasoning.
             </p>
           </article>
           <article class="card">
-            <h3>Step 3: Error Injection</h3>
+            <h3>Step 3: Fact & Relationship Construction</h3>
             <p>
-              Inject targeted errors for BG/FE/RL/DR/F/P to convert subjective generation
-              assessment into objective error identification.
+              Extract atomic facts and organize inter-variable relationships as structured evidence
+              for deep analysis.
             </p>
           </article>
           <article class="card">
-            <h3>Step 4: Evaluation</h3>
+            <h3>Step 4: Deep Report + Forecast/Plan</h3>
             <p>
-              Evaluate fine-grained capability weaknesses with objective discriminative tasks over
-              3,084 hard samples.
+              Generate comprehensive reports and forward-looking recommendations with human quality
+              checks on critical stages.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Step 5: Targeted Error Injection & Evaluation</h3>
+            <p>
+              Inject BG/FE/RL/DR/F/P errors to convert subjective generation quality into objective
+              error identification over 3,084 hard samples.
             </p>
           </article>
         </div>
@@ -243,6 +263,14 @@
 
       <section id="results" class="container reveal">
         <h2>Main Results</h2>
+        <div class="panel subpanel">
+          <h3>Key Takeaways</h3>
+          <ul class="formula-notes">
+            <li>On MCDR-Bench, PRPO consistently outperforms GRPO in all five capability dimensions.</li>
+            <li>In Think mode, PRPO delivers larger gains, indicating stronger support for long-form reasoning.</li>
+            <li>On ChartQAPRO, PRPO also improves out-of-domain generalization, especially on MCQ and hypothetical tasks.</li>
+          </ul>
+        </div>
         <div class="panel table-wrap">
           <h3>MCDR-Bench: PRPO vs GRPO (Qwen2.5-VL-7B)</h3>
           <table>
@@ -348,6 +376,23 @@
           </table>
         </div>
 
+        <div class="panel subpanel training-layout">
+          <img src="assets/training.svg" alt="Training dynamics comparison between GRPO and PRPO." />
+          <div class="training-text">
+            <h3>Training Dynamics Interpretation</h3>
+            <p>
+              The trajectory comparison shows that PRPO expands exploration early and maintains
+              stronger convergence stability later. This behavior is consistent with the method
+              design: reward-wise decomposition preserves discriminative optimization signals, while
+              capability-wise grouping reduces gradient conflicts across heterogeneous samples.
+            </p>
+            <p class="caption">
+              In practice, this translates to better optimization efficiency and more robust
+              multi-capability performance than scalarized GRPO training.
+            </p>
+          </div>
+        </div>
+
         <div class="panel media-card">
           <img src="assets/geo_00.png" alt="PRPO performance comparison figure." />
           <p class="caption">
@@ -357,49 +402,18 @@
         </div>
       </section>
 
-      <section id="authors" class="container panel reveal">
-        <h2>Authors & Affiliations</h2>
-        <div class="author-grid">
-          <article class="author-card">
-            <h3>Jiajin Tang</h3>
-            <p>ByteDance; ShanghaiTech University</p>
-          </article>
-          <article class="author-card">
-            <h3>Gaoyang</h3>
-            <p>ByteDance</p>
-          </article>
-          <article class="author-card">
-            <h3>Wenjie Wang</h3>
-            <p>ShanghaiTech University</p>
-          </article>
-          <article class="author-card">
-            <h3>Sibei Yang</h3>
-            <p>Sun Yat-sen University</p>
-          </article>
-          <article class="author-card">
-            <h3>Xing Chen</h3>
-            <p>ByteDance</p>
-          </article>
-        </div>
-        <div class="affiliation-logos">
-          <img src="assets/sysu.svg" alt="Sun Yat-sen University logo" />
-          <img src="assets/shanghaitech.svg" alt="ShanghaiTech University logo" />
-          <img src="assets/bytedance.svg" alt="ByteDance logo" />
-        </div>
-      </section>
-
       <section id="resources" class="container reveal">
         <h2>Resources</h2>
         <div class="cards-3">
           <article class="card">
             <h3>Paper</h3>
-            <p>Camera-ready and arXiv links will be updated when available.</p>
-            <a href="#" aria-disabled="true">Coming soon</a>
+            <p>arXiv preprint is available; camera-ready and proceedings links will be updated soon.</p>
+            <a href="https://arxiv.org/abs/2603.06677v1" target="_blank" rel="noreferrer">arXiv: 2603.06677v1</a>
           </article>
           <article class="card">
             <h3>Code</h3>
             <p>Project page repository and future training scripts.</p>
-            <a href="https://github.com/Toneyaya/prpo.github.io" target="_blank" rel="noreferrer">GitHub Repo</a>
+            <a href="https://github.com/Toneyaya/PRPO" target="_blank" rel="noreferrer">GitHub</a>
           </article>
           <article class="card">
             <h3>Benchmark</h3>
