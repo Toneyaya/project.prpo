@@ -119,19 +119,17 @@ h1 {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 0.75rem;
-  width: 100%;
-  justify-content: flex-end;
+  margin-left: -0.45rem;
 }
 
 .page-corner-logos img {
-  height: 42px;
+  height: 36px;
   width: auto;
   border: 1px solid var(--line);
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.9);
-  padding: 0.34rem 0.52rem;
-  box-shadow: 0 8px 20px rgba(16, 22, 30, 0.12);
+  padding: 0.34rem 0.5rem;
+  box-shadow: 0 4px 10px rgba(16, 22, 30, 0.08);
 }
 
 .hero {
@@ -428,12 +426,8 @@ pre {
     grid-template-columns: 1fr;
   }
 
-  .page-corner-logos {
-    justify-content: center;
-  }
-
   .page-corner-logos img {
-    height: 34px;
+    height: 30px;
   }
 
   .hero {
