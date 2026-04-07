@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="PRPO project page: Chart Deep Research in LVLMs via Parallel Relative Policy Optimization."
+    />
+    <title>PRPO | Chart Deep Research in LVLMs</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <header class="topbar">
+      <div class="container nav-inner">
+        <a class="brand" href="#top">PRPO</a>
+        <nav>
+          <a href="#overview">Overview</a>
+          <a href="#method">Method</a>
+          <a href="#results">Results</a>
+          <a href="#resources">Resources</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero container reveal">
+        <p class="venue">ICLR 2026 Submission</p>
+        <h1>Chart Deep Research in LVLMs via Parallel Relative Policy Optimization</h1>
+        <p class="subtitle">
+          PRPO introduces parallel optimization across reward dimensions and capability partitions,
+          while MCDR-Bench establishes objective deep-research evaluation through controllable error
+          injection.
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="#results">Main Results</a>
+          <a class="button" href="#citation">BibTeX</a>
+          <a class="button" href="https://github.com/Toneyaya/prpo.github.io" target="_blank" rel="noreferrer">Code</a>
+        </div>
+      </section>
+
+      <section id="overview" class="container panel reveal">
+        <h2>Abstract</h2>
+        <p>
+          We target chart deep research, where models must go beyond visual QA to produce
+          high-level analytical reasoning and planning. Existing post-training methods suffer from
+          multi-dimensional reward interference and heterogeneous data optimization conflicts.
+          Existing benchmarks also under-evaluate deep analytical ability. We propose PRPO for
+          stable parallel preference optimization and MCDR-Bench for objective capability evaluation.
+          Together, they establish a unified framework for training and assessment of chart deep
+          research in LVLMs.
+        </p>
+      </section>
+
+      <section class="container reveal media-block">
+        <div class="panel media-card">
+          <img src="assets/teaser.svg" alt="Optimization trajectories of GRPO versus PRPO." />
+          <p class="caption">
+            PRPO decomposes optimization across reward dimensions and data types, improving
+            exploration and reducing optimization conflicts.
+          </p>
+        </div>
+      </section>
+
+      <section id="method" class="container reveal">
+        <h2>Method</h2>
+        <div class="cards-3">
+          <article class="card">
+            <h3>Reward-PRPO</h3>
+            <p>
+              Computes dimension-specific advantages instead of collapsing heterogeneous rewards to
+              one scalar, preserving optimization signal diversity.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Data-PRPO</h3>
+            <p>
+              Partitions training data by capability type and applies iterative outlier relegation to
+              avoid unstable group statistics.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Unified PRPO</h3>
+            <p>
+              Combines reward parallelization and data parallelization to mitigate both reward
+              interference and heterogeneous optimization conflicts.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="container panel reveal">
+        <h2>MCDR-Bench</h2>
+        <p>
+          MCDR-Bench is built on the error uniqueness principle. It transforms subjective open-ended
+          report generation into objective error identification across five dimensions: Background
+          Knowledge, Fact Extraction, Relationship Construction, Deep Report, and Forecast/Plan.
+        </p>
+        <div class="stats">
+          <div>
+            <p class="num">1,021</p>
+            <p class="label">High-complexity charts curated</p>
+          </div>
+          <div>
+            <p class="num">3,084</p>
+            <p class="label">Error-injected evaluation samples</p>
+          </div>
+          <div>
+            <p class="num">10k</p>
+            <p class="label">RL training samples with capability labels</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="results" class="container reveal">
+        <h2>Results</h2>
+        <div class="panel table-wrap">
+          <h3>MCDR-Bench (Qwen2.5-VL-7B)</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Setting</th>
+                <th>Mean</th>
+                <th>Overall</th>
+                <th>Gain vs. GRPO</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>GRPO</td>
+                <td>62.26</td>
+                <td>61.71</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <td>PRPO</td>
+                <td><strong>69.90</strong></td>
+                <td><strong>69.62</strong></td>
+                <td>+7.64</td>
+              </tr>
+              <tr>
+                <td>GRPO (Think)</td>
+                <td>63.99</td>
+                <td>63.00</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <td>PRPO (Think)</td>
+                <td><strong>76.89</strong></td>
+                <td><strong>76.26</strong></td>
+                <td>+12.90</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="panel table-wrap">
+          <h3>ChartQAPRO Generalization</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Model</th>
+                <th>Mean</th>
+                <th>Overall</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Qwen2.5-VL-7B-Instruct</td>
+                <td>41.33</td>
+                <td>36.31</td>
+              </tr>
+              <tr>
+                <td>+ PRPO</td>
+                <td><strong>47.69</strong></td>
+                <td><strong>42.95</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="panel media-card">
+          <img src="assets/training.svg" alt="Training curve of PRPO and GRPO." />
+          <p class="caption">
+            PRPO shows faster reward growth in early training and more stable optimization in later
+            stages.
+          </p>
+        </div>
+      </section>
+
+      <section id="resources" class="container reveal">
+        <h2>Resources</h2>
+        <div class="cards-3">
+          <article class="card">
+            <h3>Paper</h3>
+            <p>Camera-ready and arXiv links will be updated when available.</p>
+            <a href="#" aria-disabled="true">Coming soon</a>
+          </article>
+          <article class="card">
+            <h3>Code</h3>
+            <p>Project page repository and future training scripts.</p>
+            <a href="https://github.com/Toneyaya/prpo.github.io" target="_blank" rel="noreferrer">GitHub Repo</a>
+          </article>
+          <article class="card">
+            <h3>Benchmark</h3>
+            <p>MCDR-Bench data release and evaluation toolkit.</p>
+            <a href="#" aria-disabled="true">Coming soon</a>
+          </article>
+        </div>
+      </section>
+
+      <section id="citation" class="container panel reveal">
+        <h2>Citation</h2>
+        <pre><code>@inproceedings{prpo2026,
+  title={Chart Deep Research in LVLMs via Parallel Relative Policy Optimization},
+  author={Anonymous Authors},
+  booktitle={International Conference on Learning Representations},
+  year={2026}
+}</code></pre>
+      </section>
+    </main>
+
+    <footer class="container footer reveal">
+      <p>Maintained by PRPO authors.</p>
+      <p>Last updated: 2026-04-07</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
